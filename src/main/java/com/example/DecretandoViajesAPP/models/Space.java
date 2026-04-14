@@ -12,6 +12,8 @@ public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    private String names;
     private String descripcion;
     private String foto;
     private Integer aforo;
@@ -21,6 +23,7 @@ public class Space {
 
     public Space(UUID id, String descripcion, String foto, Integer aforo) {
         this.id = id;
+        this.names = names;
         this.descripcion = descripcion;
         this.foto = foto;
         this.aforo = aforo;
@@ -33,6 +36,12 @@ public class Space {
     public void setId(UUID id) {
         this.id = id;
     }
+
+    public String getNames() {
+        return names;
+    }
+
+    public String setNames(String names) {return names;}
 
     public String getDescripcion() {
         return descripcion;
