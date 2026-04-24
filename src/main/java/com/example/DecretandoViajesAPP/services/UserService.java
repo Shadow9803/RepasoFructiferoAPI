@@ -18,10 +18,12 @@ public class UserService {
 
     //Inyectando una dependencia al repositorioUser
     @Autowired
-    private IRepositorieSpace repositorieUser;
+    private IRepositorieUser repositorieUser;
 
     public User saveUserInDB(User data){
         //condiciones logicas para validar datos a guardar
+
+        //1. validar que el correo a registrar no se haya guardado previamente
 
         if(repositorieUser.findByEmail(data.getEmail()).isPresent()){
             throw new ResponseStatusException(
@@ -29,9 +31,7 @@ public class UserService {
                     "Ya existe un correo registrado igual al que me entregas "
             );
         }
-
-        return false;
-
+    
         if (data.getNames().isEmpty()||data.getNames().isBlank()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -87,7 +87,16 @@ public class UserService {
 
         //Buscar y validar si el ID que me envian existe
         //elimino el registro en BD
-        return false;
+        Optional<User>usuario_que_estoy_buscando=this.repositorieUser.findById(id);
+        if (usuario_que_estoy_buscando.isEmpty()){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "El usuario que quieres eliminar no existe en BD "
+            );
+        }
+        User usuario_que_encontre=usuario_que_estoy_buscando.get();
+        this.repositorieUser.deleteById(id);
+        return true;
     }
 
     public List<User> searchUserInBD(){
